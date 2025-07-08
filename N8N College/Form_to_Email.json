@@ -1,0 +1,306 @@
+{
+  "name": "Form to Email",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Company ",
+        "formDescription": "To Get Employees Skill \n\n",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name ",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "City "
+            },
+            {
+              "fieldLabel": "Phone Number",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Skills"
+            },
+            {
+              "fieldLabel": "Personal Email",
+              "fieldType": "email",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -520,
+        0
+      ],
+      "id": "a21afa6a-4bf4-453f-8cdc-acf5b8732721",
+      "name": "On form submission",
+      "webhookId": "28a6a111-0142-415a-b5d7-831160ffad6d"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create a short and professional personal profile using the following details:\n\n- Name: {{ $('On form submission').item.json['Name '] }}\n- City: {{ $('On form submission').item.json['City '] }}\n- Skills: {{ $('On form submission').item.json.Skills }}\n- Phone Number: {{ $('On form submission').item.json['Phone Number'] }}\n- Email:{{ $('On form submission').item.json['Personal Email'] }}\n\nDo not include the phone number or email in the response. Focus on writing a short bio or intro about the person highlighting their skills and where they are from.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        0
+      ],
+      "id": "6c66fd6f-c4e6-4bb0-822c-712b0fb0a162",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        180,
+        360
+      ],
+      "id": "802833ef-da8c-4160-9415-53c9bb716e80",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "VZxyiuqzfuoGXpsn",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1RbwjBSTV7lj-rLwkYjbpDGGUy4_pu3w59BD1gibgeKY",
+          "mode": "list",
+          "cachedResultName": "Employee Lists ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RbwjBSTV7lj-rLwkYjbpDGGUy4_pu3w59BD1gibgeKY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RbwjBSTV7lj-rLwkYjbpDGGUy4_pu3w59BD1gibgeKY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name ",
+              "displayName": "Name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "City ",
+              "displayName": "City ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Skills",
+              "displayName": "Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Personal Email",
+              "displayName": "Personal Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "formMode",
+              "displayName": "formMode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -260,
+        0
+      ],
+      "id": "3dcc14c6-7c5b-41c0-bdf7-cec8aa9c752e",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "a6JN48L8BZIrZFX3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert HR assistant. Create a professional and engaging job description request message for HR using the following candidate details:\n\nName: {{ $('Append or update row in sheet').item.json['Name '] }}\nCity: {{ $('Append or update row in sheet').item.json['City '] }}\nSkills: {{ $('Append or update row in sheet').item.json.Skills }}\nPhone Number:{{ $('Append or update row in sheet').item.json['Phone Number'] }}\nEmail:{{ $('Append or update row in sheet').item.json['Personal Email'] }}\n\nThe goal is to send this candidate's data to HR in a clear, polite, and structured format. Make sure the message includes:\n\n- A greeting\n- The candidate’s intent (interested in a job or profile consideration)\n- Their location and key skills\n- Contact details\n- A request for further communication\n\nWrite the message in a professional tone.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        340,
+        0
+      ],
+      "id": "6f9593d4-4324-4d96-a088-8514a184f353",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "sendTo": "ak2945867@gmail.com",
+        "subject": "Employee Application ",
+        "emailType": "text",
+        "message": "= {{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        700,
+        0
+      ],
+      "id": "c2161bf1-bc1d-4b5e-8bcf-7c659e57e9b3",
+      "name": "Send a message",
+      "webhookId": "bc4a959c-6fc8-44e5-9358-1d1ba17d3754",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fzHeORBC7iR8Tfxe",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "47f82044-a5d2-4a60-b87f-975e59fd9332",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3baf02514f943f23435b5f0d2ae6ac7bec19c5a30ed07fee95dd2bb9f68ec179"
+  },
+  "id": "IcbsPAx8ez9IgaEk",
+  "tags": []
+}
